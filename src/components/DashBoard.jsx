@@ -6,7 +6,6 @@ import {
   Flex,
   HStack,
   VStack,
-  Icon,
   useColorModeValue,
   Text,
   Drawer,
@@ -17,6 +16,9 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Img,
+  Select,
+  Center,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -25,40 +27,82 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
-  FiBell,
-  FiChevronDown,
+  
 } from "react-icons/fi";
 import CoinComp from "./CoinComp";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { CoinList } from "../configs/Api";
 
-const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-];
+
+// const coinDataItems = [
+//   { name: "Ethereum", imgSrc: "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880" },
+// ];
+
+
+const CoinNavItem = ({ imgSrc, children, ...rest }) => {
+  return (
+    <Box
+      as="a"
+      href="#"
+      style={{ textDecoration: "none" }}
+      _focus={{ boxShadow: "none" }}
+    >
+      <Flex
+      gap="10%"
+        align="center"
+        p="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: "cyan.400",
+          color: "white",
+        }}
+        {...rest}
+      >
+        
+        <Box width="20%">
+          <Center>
+            <img src={imgSrc}
+               _groupHover={{
+              color: "white",
+            }}/>
+          </Center>
+
+        </Box>
+        <Box width="75%">
+          <Text>
+
+          {children}
+          </Text>
+
+        </Box>
+      </Flex>
+    </Box>
+  );
+};
+
 
 const SidebarContent = ({ onClose, ...rest }) => {
+  const [currency, setCurrency] = useState("USD");
+const [trendingCoinData, setTrendingCoinData] = useState([]);
+
+useEffect(() => {
+  const fetchTrendingCoins = async () => {
+    try {
+      const response = await axios.get(CoinList(currency));
+      setTrendingCoinData(response.data);
+    } catch (error) {
+      console.error("Error fetching trending coins:", error);
+    }
+  };
+    fetchTrendingCoins();
+}, [currency]);
+
+
+  // console.log("sdsdsdsdsddsd",trendingCoinData);
+
   return (
     <Box
       transition="3s ease"
@@ -72,57 +116,27 @@ const SidebarContent = ({ onClose, ...rest }) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          Crypto-Chart
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
+      <Box>
+      <Text mx="8" fontSize="xl" fontFamily="monospace" fontWeight="bold">
+          TRENDING COINS
+        </Text>
+      </Box>
       <Box mt="4" maxHeight="calc(100vh - 4rem)" overflowY="auto">
-        {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
-          </NavItem>
+        {trendingCoinData.map((data) => (
+          <CoinNavItem key={data.id.toUpperCase()} imgSrc={data.image}>
+            {data.id.toUpperCase()}
+          </CoinNavItem>
         ))}
       </Box>
     </Box>
   );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
-  return (
-    <Box
-      as="a"
-      href="#"
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: "cyan.400",
-          color: "white",
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: "white",
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Box>
-  );
-};
+
 
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
@@ -151,11 +165,18 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        Crypto-Chart
       </Text>
 
+
+
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
+      <Select placeholder='Select option'>
+        <option value='option1'>Option 1</option>
+        <option value='option2'>Option 2</option>
+        <option value='option3'>Option 3</option>
+      </Select>
+        {/* <IconButton
           size="lg"
           variant="ghost"
           aria-label="open menu"
@@ -202,7 +223,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Sign out</MenuItem>
             </MenuList>
           </Menu>
-        </Flex>
+        </Flex> */}
       </HStack>
     </Flex>
   );
@@ -210,6 +231,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
 const DashBoard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  
+  
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent

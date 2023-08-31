@@ -8,7 +8,7 @@ export const chartDays = [
       value: 30,
     },
     {
-      label: "1 Months",
+      label: "3 Months",
       value: 90,
     },
     {

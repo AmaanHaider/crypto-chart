@@ -56,7 +56,8 @@ import {
   
     return (
       <Box
-      m="6"
+      m="2%"
+      gap="5"
       >
         {!historicData || !flag ? (
           <Flex justify="center" align="center">
@@ -65,13 +66,16 @@ import {
         ) : (
           <>
            <Flex
-              marginTop={4}
-              justifyContent="space-around"
+           padding="2"
+          
+              marginTop="0.5%"
+              gap="5"
               width="100%"
-              marginBottom={{ base: 4, md: 0 }}
+              // marginBottom={{ base: 4, md: 0 }}
             >
               {chartDays.map((day) => (
                 <Button
+                colorScheme="blue"
                   key={day.value}
                   onClick={() => {
                     setDays(day.value);

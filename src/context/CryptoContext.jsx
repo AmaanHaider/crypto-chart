@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { CoinList } from "../configs/Api";
-// import { Center, Spinner } from "@chakra-ui/react";
 
 const Crypto = createContext();
 
