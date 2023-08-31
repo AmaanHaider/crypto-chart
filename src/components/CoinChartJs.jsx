@@ -57,7 +57,6 @@ import {
     return (
       <Box
       m="6"
-   
       >
         {!historicData || !flag ? (
           <Flex justify="center" align="center">
@@ -65,6 +64,25 @@ import {
           </Flex>
         ) : (
           <>
+           <Flex
+              marginTop={4}
+              justifyContent="space-around"
+              width="100%"
+              marginBottom={{ base: 4, md: 0 }}
+            >
+              {chartDays.map((day) => (
+                <Button
+                  key={day.value}
+                  onClick={() => {
+                    setDays(day.value);
+                    setFlag(false);
+                  }}
+                  variant={day.value === days ? "solid" : "outline"}
+                >
+                  {day.label}
+                </Button>
+              ))}
+            </Flex>
             <Line
               data={{
                 labels: historicData.map((coin) => {
@@ -92,25 +110,7 @@ import {
                 },
               }}
             />
-            <Flex
-              marginTop={4}
-              justifyContent="space-around"
-              width="100%"
-              marginBottom={{ base: 4, md: 0 }}
-            >
-              {chartDays.map((day) => (
-                <Button
-                  key={day.value}
-                  onClick={() => {
-                    setDays(day.value);
-                    setFlag(false);
-                  }}
-                  variant={day.value === days ? "solid" : "outline"}
-                >
-                  {day.label}
-                </Button>
-              ))}
-            </Flex>
+           
           </>
         )}
       </Box>
