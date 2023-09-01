@@ -9,17 +9,17 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import CoinChartsJs from "../components/CoinChartJs";
 import { SingleCoin } from "../configs/Api";
 import { CryptoState } from "../context/CryptoContext";
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
-const CoinComp = () => {
-  const id = "ethereum";
+const CoinComp = ({coinId}) => {
+  const id = coinId || "bitcoin"
+  // console.log(id);
   const [coin, setCoin] = useState();
   const { currency, symbol } = CryptoState();
   const fetchCoin = async () => {
@@ -28,14 +28,14 @@ const CoinComp = () => {
   };
   useEffect(() => {
     fetchCoin();
-  }, []);
+  }, [id]);
   if (!coin) {
     return (
       <Flex justify="center" align="center" height="100vh">
         <Spinner color="red" size="lg" />
       </Flex>
     );
-  }
+  };
   return (
     <Box>
       <Box mt="5" borderRight="2px solid grey">

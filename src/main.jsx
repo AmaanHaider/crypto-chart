@@ -6,17 +6,17 @@ import CryptoContext from "./context/CryptoContext";
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "dark", 
+    initialColorMode: "dark",
   },
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CryptoContext>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <ChakraProvider theme={theme}>
+      <CryptoContext>
         <App />
-      </ChakraProvider>
-    </CryptoContext>
+      </CryptoContext>
+    </ChakraProvider>
   </React.StrictMode>
 );
