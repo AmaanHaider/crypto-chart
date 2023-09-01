@@ -19,7 +19,6 @@ function numberWithCommas(x) {
 
 const CoinComp = ({coinId}) => {
   const id = coinId || "bitcoin"
-  // console.log(id);
   const [coin, setCoin] = useState();
   const { currency, symbol } = CryptoState();
   const fetchCoin = async () => {

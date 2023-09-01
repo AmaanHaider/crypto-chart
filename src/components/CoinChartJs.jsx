@@ -1,9 +1,11 @@
 import {
     Box,
     Button,
+    Center,
     CircularProgress,
     Flex,
     Heading,
+    Select,
     Spinner,
     Text,
     useColorModeValue,
@@ -38,19 +40,24 @@ import {
   
   const CoinChartJs = ({ coin }) => {
     const [historicData, setHistoricData] = useState();
-    const [days, setDays] = useState(1);
+    const [days, setDays] = useState(365);
     const { currency } = CryptoState();
     const [flag, setFlag] = useState(false);
-  
-    const fetchHistoricData = async () => {
-      const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-      setFlag(true);
-      setHistoricData(data.prices);
-    };
+
   
     useEffect(() => {
+      const fetchHistoricData = async () => {
+        try {
+          const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
+          setFlag(true);
+          setHistoricData(data.prices);
+        } catch (error) {
+          console.error('Error fetching historic data:', error);
+        }
+      };
+      
       fetchHistoricData();
-    }, [days]);
+    }, [days,coin]);
   
     const borderColor = useColorModeValue("green", "#e88054");
   
@@ -61,31 +68,48 @@ import {
       >
         {!historicData || !flag ? (
           <Flex justify="center" align="center">
-            <CircularProgress color="red" size="250px" thickness={1} />
+            <CircularProgress isIndeterminate color="green.300" size="150px" thickness={1} />
           </Flex>
         ) : (
           <>
            <Flex
-           padding="2"
+               padding="2"
           
               marginTop="0.5%"
-              gap="5"
+             
               width="100%"
-              // marginBottom={{ base: 4, md: 0 }}
             >
-              {chartDays.map((day) => (
-                <Button
-                colorScheme="blue"
-                  key={day.value}
-                  onClick={() => {
-                    setDays(day.value);
-                    setFlag(false);
-                  }}
-                  variant={day.value === days ? "solid" : "outline"}
-                >
-                  {day.label}
-                </Button>
-              ))}
+              <Box width="30%" >
+                <Flex width="100%" >
+                    <Center >
+                  <Text fontSize="sm" as="b">Time Frame :</Text>
+
+                    </Center>
+
+                  <Select
+                      value={days}
+                      onChange={(event) => {
+                        setDays(event.target.value);
+                        setFlag(false);
+                      }}
+                      width="40%"
+                      padding="2"
+                      marginTop="0.5%"
+                      gap="5"
+                      // Add any other styles or props you need for the Select component
+                    >
+                      {chartDays.map((day) => (
+                        <option key={day.value} value={day.value}>
+                          {day.label}
+                        </option>
+                      ))}
+                    </Select>
+
+              
+                </Flex>
+              </Box>
+              
+             
             </Flex>
             <Line
               data={{

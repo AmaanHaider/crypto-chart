@@ -21,15 +21,63 @@ import CoinComp from "./CoinComp";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CoinList } from "../configs/Api"
+import CoinApache from "./CoinApache";
 
 
+const MobileNav = ({ onOpen,setChartType, ...rest }) => {
+  return (
+    <Flex
+      ml={{ base: 0, md: 60 }}
+      px={{ base: 4, md: 4 }}
+      height="20"
+      alignItems="center"
+      borderBottomWidth="1px"
+      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      justifyContent={{ base: "space-between", md: "flex-end" }}
+      {...rest}
+    >
+      <IconButton
+        display={{ base: "flex", md: "none" }}
+        onClick={onOpen}
+        variant="outline"
+        aria-label="open menu"
+        icon={<FiMenu />}
+      />
+      <Text
+        display={{ base: "flex", md: "none" }}
+        fontSize="2xl"
+        fontFamily="monospace"
+        fontWeight="bold"
+      >
+        Crypto-Chart
+      </Text>
+      <Box m={5}>
+        <Flex mt={2}>
+        <Text m={2}>Choose Chart Layout :</Text>
+       <HStack spacing={{ base: "0", md: "6" }}>
+        <Select
+          onChange={(event) => setChartType(event.target.value)}
+          defaultValue="option1" // Set a default option
+        >
+          <option value="option1">Chart.js Charts</option>
+          <option value="option2">Apache SDK charts</option>
+        </Select>
+      </HStack>
+        </Flex>
+        <Text color="red" p={2}>
+         * Note: This option is just for Demo*
+        </Text>
+
+        </Box>
+    </Flex>
+  );
+};
 
 
 const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
   return (
     <Box
       transition="3s ease"
-      // bg={useColorModeValue("#5C5470", "#5C5470")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       w={{ base: "full", md: 60 }}
@@ -49,10 +97,8 @@ const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
         </Text>
       </Box>
       <Box mt="4" maxHeight="calc(100vh - 4rem)" overflowY="auto">
-    
-         {
-          trendingCoinData.map((data)=>(
-            <Box
+        {trendingCoinData.map((data) => (
+          <Box
             as="a"
             style={{ textDecoration: "none" }}
             _focus={{ boxShadow: "none" }}
@@ -60,7 +106,6 @@ const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
             onClick={() => setCoinId(data.id)}
           >
             <Flex
-           
               align="center"
               p="4"
               borderRadius="lg"
@@ -72,81 +117,40 @@ const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
               }}
               {...rest}
             >
-              <Flex>
-
-              <Box width="20%">
-                <Center>
-                  <img src={data.image}
-                     _groupHover={{
-                    color: "white",
-                  }}/>
-                </Center>
-              </Box>
-              <Box width="75%" ml={1}>
-                <Center>
-                {data.id.toUpperCase()}
-                </Center>
-                
-              </Box>
+              <Flex gap={4}  >
+                <Box width="20%">
+                  <Center>
+                    <img
+                      src={data.image}
+                      _groupHover={{
+                        color: "white",
+                      }}
+                    />
+                  </Center>
+                </Box>
+                <Box width="75%" ml={1}>
+                    <Text>{data.id.toUpperCase()}</Text>
+                </Box>
               </Flex>
             </Flex>
           </Box>
-          ))
-        } 
+        ))}
       </Box>
     </Box>
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
-  return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
-      height="20"
-      alignItems="center"
-      // bg={useColorModeValue("#ADC4CE", "#ADC4CE")}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
-      {...rest}
-    >
-      <IconButton
-        display={{ base: "flex", md: "none" }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
-
-      <Text
-        display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
-      >
-        Crypto-Chart
-      </Text>
-      <HStack spacing={{ base: "0", md: "6" }}>
-      <Select placeholder='Select option'>
-        <option value='option1'>Option 1</option>
-        <option value='option2'>Option 2</option>
-        <option value='option3'>Option 3</option>
-      </Select>
-      </HStack>
-    </Flex>
-  );
-};
 
 const DashBoard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currency, setCurrency] = useState("USD");
   const [trendingCoinData, setTrendingCoinData] = useState([]);
-  const [coinId, setCoinId] = useState(""); // Lifted the state up
+  const [coinId, setCoinId] = useState("");
+  const [chartType, setChartType] = useState("option1"); // Default chart type
+
     useEffect(() => {
    const fetchTrendingCoins = async () => {
     try {
-      console.log("sdsjdhsdjhsdhsjdhsjhdshdsjdhsjdhsjdhjsd");
       const response = await axios.get(CoinList(currency));
       setTrendingCoinData(response.data);
     } catch (error) {
@@ -180,9 +184,14 @@ const DashBoard = () => {
           />
         </DrawerContent>
       </Drawer>
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} setChartType={setChartType}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
-        <CoinComp coinId={coinId} />
+        {chartType === "option1" ? (
+          <CoinComp coinId={coinId} />
+        ) : (
+          <CoinApache coinId={coinId} />
+          
+        )}
       </Box>
     </Box>
   );
