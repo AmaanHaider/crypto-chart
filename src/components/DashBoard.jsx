@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { CoinList } from "../configs/Api"
 import CoinApache from "./CoinApache";
+import cryptoChartLogo from "../assets/crypto-chart-logo.png";
+
 
 
 const MobileNav = ({ onOpen,setChartType, ...rest }) => {
@@ -45,12 +47,9 @@ const MobileNav = ({ onOpen,setChartType, ...rest }) => {
       />
       <Text
         display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
       >
-        Crypto-Chart
       </Text>
+      
       <Box m={5}>
         <Flex mt={2}>
         <Text m={2}>Choose Chart Layout :</Text>
@@ -85,14 +84,14 @@ const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Crypto-Chart
-        </Text>
+      <Flex h="20" mt={2} alignItems="center" mx="8" justifyContent="space-between">
+          <Box m={5} h="fit-content">
+              <img  src={cryptoChartLogo} alt="CryptoChart-logo" />
+             </Box>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      <Box>
-      <Text mx="8" fontSize="xl" fontFamily="monospace" fontWeight="bold">
+      <Box >
+      <Text mx="8" mt={5} fontSize="xl" fontFamily="monospace" fontWeight="bold">
           TRENDING COINS
         </Text>
       </Box>
