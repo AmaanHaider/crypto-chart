@@ -59,7 +59,7 @@ const MobileNav = ({ onOpen,setChartType, ...rest }) => {
           defaultValue="option1" // Set a default option
         >
           <option value="option1">Chart.js Charts</option>
-          <option value="option2">Apache SDK charts</option>
+          <option value="option2">Apache  Echarts</option>
         </Select>
       </HStack>
         </Flex>
