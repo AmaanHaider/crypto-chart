@@ -16,8 +16,6 @@ import {
   import { HistoricalChart } from "../configs/Api";
   import { CryptoState } from "../context/CryptoContext";
   import { chartDays } from "../configs/Data";
-  
-
   import {
     Chart,
     LineController,
@@ -58,9 +56,7 @@ import {
       
       fetchHistoricData();
     }, [days,coin]);
-  
     const borderColor = useColorModeValue("green", "#e88054");
-  
     return (
       <Box
       m="2%"
@@ -70,20 +66,18 @@ import {
           <Flex justify="center" align="center">
             <CircularProgress isIndeterminate color="green.300" size="150px" thickness={1} />
           </Flex>
-        ) : (
+        ) : 
+        (
           <>
            <Flex
                padding="2"
-          
               marginTop="0.5%"
-             
               width="100%"
             >
               <Box width="30%" >
                 <Flex width="100%" >
                     <Center >
                   <Text fontSize="sm" as="b">Time Frame :</Text>
-
                     </Center>
 
                   <Select
@@ -96,7 +90,6 @@ import {
                       padding="2"
                       marginTop="0.5%"
                       gap="5"
-                      // Add any other styles or props you need for the Select component
                     >
                       {chartDays.map((day) => (
                         <option key={day.value} value={day.value}>
@@ -104,12 +97,8 @@ import {
                         </option>
                       ))}
                     </Select>
-
-              
                 </Flex>
-              </Box>
-              
-             
+              </Box>        
             </Flex>
             <Line
               data={{
@@ -121,7 +110,6 @@ import {
                       : `${date.getHours()}:${date.getMinutes()} AM`;
                   return days === 1 ? time : date.toLocaleDateString();
                 }),
-  
                 datasets: [
                   {
                     data: historicData.map((coin) => coin[1]),

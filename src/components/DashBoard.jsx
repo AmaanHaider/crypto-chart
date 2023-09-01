@@ -146,8 +146,7 @@ const DashBoard = () => {
   const [currency, setCurrency] = useState("USD");
   const [trendingCoinData, setTrendingCoinData] = useState([]);
   const [coinId, setCoinId] = useState("");
-  const [chartType, setChartType] = useState("option1"); // Default chart type
-
+  const [chartType, setChartType] = useState("option1");
     useEffect(() => {
    const fetchTrendingCoins = async () => {
     try {
@@ -159,7 +158,6 @@ const DashBoard = () => {
   };
   fetchTrendingCoins()
 },[]);
-
   return (
     <Box minH="100vh" >
       <SidebarContent
@@ -190,7 +188,7 @@ const DashBoard = () => {
           <CoinComp coinId={coinId} />
         ) : (
           <CoinApache coinId={coinId} />
-          
+  
         )}
       </Box>
     </Box>

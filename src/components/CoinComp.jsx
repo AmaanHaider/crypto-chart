@@ -83,7 +83,6 @@ const CoinComp = ({coinId}) => {
                   {coin?.market_cap_rank}
                 </Text>
               </Flex>
-
               <Flex align="center">
                 <Text as="h5" fontWeight="bold">
                   Current Price:
@@ -95,7 +94,6 @@ const CoinComp = ({coinId}) => {
                   )}
                 </Text>
               </Flex>
-
               <Flex align="center">
                 <Text as="h5" fontWeight="bold">
                   Market Cap:
@@ -107,7 +105,7 @@ const CoinComp = ({coinId}) => {
                       .toString()
                       .slice(0, -6)
                   )}
-                  M
+                 {" "}  M
                 </Text>
               </Flex>
             </Box>
