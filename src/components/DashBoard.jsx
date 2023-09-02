@@ -138,8 +138,6 @@ const SidebarContent = ({  trendingCoinData, onClose, setCoinId, ...rest }) => {
     </Box>
   );
 };
-
-
 const DashBoard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currency, setCurrency] = useState("USD");
@@ -155,7 +153,7 @@ const DashBoard = () => {
       console.error("Error fetching trending coins:", error);
     }
   };
-  fetchTrendingCoins()
+  fetchTrendingCoins();
 },[]);
   return (
     <Box minH="100vh" >
@@ -184,9 +182,9 @@ const DashBoard = () => {
       <MobileNav onOpen={onOpen} setChartType={setChartType}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {chartType === "option1" ? (
-          <CoinComp coinId={coinId} />
+          <CoinComp  coinId={coinId} setCoinId={setCoinId} />
         ) : (
-          <CoinApache coinId={coinId} />
+          <CoinApache coinId={coinId} setCoinId={setCoinId} />
   
         )}
       </Box>

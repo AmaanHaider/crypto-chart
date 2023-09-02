@@ -6,37 +6,96 @@ import {
   Spinner,
   Text,
   Center,
+  Select,
+  
+  FormControl,
+  FormLabel,
+  Code,
+  FormErrorMessage
 } from "@chakra-ui/react";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CoinChartsJs from "../components/CoinChartJs";
-import { SingleCoin } from "../configs/Api";
+import { CoinList, SingleCoin } from "../configs/Api";
 import { CryptoState } from "../context/CryptoContext";
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+}
 
-const CoinComp = ({coinId}) => {
-  const id = coinId || "bitcoin"
+const CoinComp = ({ coinId, setCoinId }) => {
+  const id = coinId || "bitcoin";
   const [coin, setCoin] = useState();
+  const [allCoinData, setAllCoinData] = useState([]);
   const { currency, symbol } = CryptoState();
-  const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
-  };
+
+
   useEffect(() => {
+    const fetchCoin = async () => {
+      try {
+        const { data } = await axios.get(SingleCoin(id));
+        setCoin(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchCoin();
   }, [id]);
+
+  // console.log(id);
+
+
+  useEffect(()=>{
+    const fetchAllCoinData = async ()=>{
+      try {
+        const res= await axios.get(CoinList(currency));
+        setAllCoinData(res.data);
+        
+      } catch (error) {
+        console.error();(error);
+      }
+    }
+    fetchAllCoinData();
+  },[currency])
+
+  const handleOptionChange =(e)=>{
+    setCoinId(e.target.value)
+  }
+
+
   if (!coin) {
     return (
       <Flex justify="center" align="center" height="100vh">
         <Spinner color="red" size="lg" />
       </Flex>
     );
-  };
+  }
   return (
     <Box>
+      <Box>
+        <Center width="45%">
+         <FormControl p={4}>
+          <FormLabel>
+            Search Crypto
+           </FormLabel>
+          <Select    
+          value={id}      
+            size="sm"
+            isSearchable
+            onChange={handleOptionChange}
+          >
+            {
+              allCoinData.map((item)=>(
+                  <option value={item.id}>{item.id.toUpperCase()}</option>
+               
+              ))
+            }
+          </Select>
+        </FormControl>
+        </Center>
+      </Box>
+
       <Box mt="5" borderRight="2px solid grey">
         <Flex gap="5%">
           <Box w="70%">

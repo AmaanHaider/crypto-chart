@@ -10,9 +10,11 @@ import {
   Text,
   Select,
   Image,
+  FormControl,
+  FormLabel,
 } from "@chakra-ui/react";
 import ReactECharts from "echarts-for-react";
-import { HistoricalChart, SingleCoin } from "../configs/Api";
+import { CoinList, HistoricalChart, SingleCoin } from "../configs/Api";
 import { CryptoState } from "../context/CryptoContext";
 import { chartDays } from "../configs/Data";
 
@@ -20,13 +22,14 @@ import { chartDays } from "../configs/Data";
 //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 // }
 
-function CoinApache({ coinId }) {
+function CoinApache({ coinId ,setCoinId}) {
   const id = coinId || "bitcoin";
   const [chartData, setChartData] = useState(null);
   const [days, setDays] = useState(365);
   const { currency, symbol } = CryptoState();
   const [flag, setFlag] = useState(false);
   const [coin, setCoin] = useState();
+  const [allCoinData, setAllCoinData] = useState([]);
 
   useEffect(() => {
     const fetchCoin = async () => {
@@ -48,6 +51,28 @@ function CoinApache({ coinId }) {
     };
     fetchData();
   }, [days, id]);
+
+
+
+  useEffect(()=>{
+    const fetchAllCoinData = async ()=>{
+      try {
+        const res= await axios.get(CoinList(currency));
+        setAllCoinData(res.data);
+        
+      } catch (error) {
+        console.error();(error);
+      }
+    }
+    fetchAllCoinData();
+  },[currency])
+
+  const handleOptionChange =(e)=>{
+    setCoinId(e.target.value)
+  }
+
+
+
   const option = {
     xAxis: {
       type: "time",
@@ -72,6 +97,30 @@ function CoinApache({ coinId }) {
   };
   return (
     <Box p={4}>
+
+       <Box>
+        <Center width="45%">
+         <FormControl p={4}>
+          <FormLabel>
+            Search Crypto
+           </FormLabel>
+          <Select    
+          value={id}      
+            size="sm"
+            isSearchable
+            onChange={handleOptionChange}
+          >
+            {
+              allCoinData.map((item)=>(
+                  <option value={item.id}>{item.id.toUpperCase()}</option>
+               
+              ))
+            }
+          </Select>
+        </FormControl>
+        </Center>
+      </Box>
+
       <Box mt="5" borderRight="2px solid grey">
         <Flex gap="5%">
           <Box w="70%">
