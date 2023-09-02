@@ -1,10 +1,13 @@
-# Crypto Charting App
+# Crypto Charting 
 
-![App Screenshot](./src/assets/appScreenshot.png)
+![App Screenshot](./src/assets/screenshot.png)
 
 ## Overview
 
 The Crypto Charting App is a web application that allows users to track cryptocurrency prices and view historical price charts. It utilizes the CoinGecko API for cryptocurrency data and supports two charting libraries: Chart.js and Apache ECharts. The application is built using React.js and styled with Chakra UI.
+
+**Live Demo**: [Crypto Charting App Live](https://crypto-chart-amaan.vercel.app/)
+
 
 ## Features
 
